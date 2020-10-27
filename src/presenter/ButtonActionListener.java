@@ -110,7 +110,7 @@ public class ButtonActionListener implements ActionListener {
             case "C":
                 temp = "";
                 operator = "";
-                textField.setText("");
+                textField.setText("0");
                 break;
             case ".":
                 if (!fieldValue.contains("."))

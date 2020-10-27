@@ -12,10 +12,10 @@ import java.awt.event.ActionListener;
  */
 
 public class ButtonActionListener implements ActionListener {
-    Arithmetic arithmetic = new Arithmetic();
-    JTextField textField = WindowGUI.textField;
-    String temp = "";
-    String operator = "";
+    private final Arithmetic arithmetic = new Arithmetic();
+    private JTextField textField = WindowGUI.textField;
+    private String temp = "";
+    private String operator = "";
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -23,72 +23,22 @@ public class ButtonActionListener implements ActionListener {
 
         switch (e.getActionCommand()) {
             case "+":
-                if (temp.equals("")) {
-                    temp = fieldValue;
-                    operator = "+";
-                    textField.setText("");
-                } else {
-                    temp = arithmetic.add(temp, fieldValue);
-                    textField.setText(temp);
-                }
+                performActionFor("+", fieldValue);
                 break;
             case "-":
-                if (temp.equals("")) {
-                    temp = fieldValue;
-                    operator = "-";
-                    textField.setText("");
-                } else {
-                    temp = arithmetic.subtract(temp, fieldValue);
-                    textField.setText(temp);
-                }
+                performActionFor("-", fieldValue);
                 break;
             case "*":
-                if (temp.equals("")) {
-                    temp = fieldValue;
-                    operator = "*";
-                    textField.setText("");
-                } else {
-                    temp = arithmetic.multiplyBy(temp, fieldValue);
-                    textField.setText(temp);
-                }
+                performActionFor("*", fieldValue);
                 break;
             case "/":
-                if (temp.equals("")) {
-                    temp = fieldValue;
-                    operator = "/";
-                    textField.setText("");
-                } else {
-                    temp = arithmetic.divideBy(temp, fieldValue);
-                    textField.setText(temp);
-                }
+                performActionFor("/", fieldValue);
                 break;
             case "%":
-                if (temp.equals("")) {
-                    temp = fieldValue;
-                    operator = "%";
-                    textField.setText("");
-                } else {
-                    temp = arithmetic.percent(temp, fieldValue);
-                    textField.setText(temp);
-                }
+                performActionFor("%", fieldValue);
                 break;
             case "=":
-                if (operator.equals("+")) {
-                    temp = arithmetic.add(temp, fieldValue);
-                    textField.setText(temp);
-                }else if (operator.equals("-")) {
-                    temp = arithmetic.subtract(temp, fieldValue);
-                    textField.setText(temp);
-                }else if (operator.equals("*")) {
-                    temp = arithmetic.multiplyBy(temp, fieldValue);
-                    textField.setText(temp);
-                }else if (operator.equals("/")) {
-                    temp = arithmetic.divideBy(temp, fieldValue);
-                    textField.setText(temp);
-                }else if (operator.equals("%")) {
-                    temp = arithmetic.percent(temp, fieldValue);
-                    textField.setText(temp);
-                }
+                chooseCommand(operator, fieldValue);
                 temp = "";
                 operator = "";
                 break;
@@ -104,8 +54,13 @@ public class ButtonActionListener implements ActionListener {
                 temp = "";
                 break;
             case "Del":
-                if (!fieldValue.equals(""))
-                    textField.setText(fieldValue.substring(0, fieldValue.length()-1));
+                if (!fieldValue.equals("") && !fieldValue.equals("0")) {
+                    if (fieldValue.length() > 1) {
+                        textField.setText(fieldValue.substring(0, fieldValue.length() - 1));
+                    }else {
+                        textField.setText("0");
+                    }
+                }
                 break;
             case "C":
                 temp = "";
@@ -113,41 +68,79 @@ public class ButtonActionListener implements ActionListener {
                 textField.setText("0");
                 break;
             case ".":
-                if (!fieldValue.contains("."))
+                if (!fieldValue.contains(".") && !fieldValue.isEmpty())
                     textField.setText(fieldValue + ".");
                 break;
             case "0":
-                textField.setText(fieldValue + "0");
+                addDigit("0", fieldValue);
                 break;
             case "1":
-                textField.setText(fieldValue + "1");
+                addDigit("1", fieldValue);
                 break;
             case "2":
-                textField.setText(fieldValue + "2");
+                addDigit("2", fieldValue);
                 break;
             case "3":
-                textField.setText(fieldValue + "3");
+                addDigit("3", fieldValue);
                 break;
             case "4":
-                textField.setText(fieldValue + "4");
+                addDigit("4", fieldValue);
                 break;
             case "5":
-                textField.setText(fieldValue + "5");
+                addDigit("5", fieldValue);
                 break;
             case "6":
-                textField.setText(fieldValue + "6");
+                addDigit("6", fieldValue);
                 break;
             case "7":
-                textField.setText(fieldValue + "7");
+                addDigit("7", fieldValue);
                 break;
             case "8":
-                textField.setText(fieldValue + "8");
+                addDigit("8", fieldValue);
                 break;
             case "9":
-                textField.setText(fieldValue + "9");
+                addDigit("9", fieldValue);
                 break;
         }
     }
+
+    private void performActionFor(String command, String fieldValue) {
+        if (temp.equals("")) {
+            temp = fieldValue;
+            operator = command;
+            textField.setText("");
+        } else {
+            chooseCommand(command, fieldValue);
+        }
+    }
+
+    private void chooseCommand(String operator, String fieldValue) {
+        switch (operator) {
+            case "+":
+                temp = arithmetic.add(temp, fieldValue);
+                textField.setText(temp);
+                break;
+            case "-":
+                temp = arithmetic.subtract(temp, fieldValue);
+                textField.setText(temp);
+                break;
+            case "*":
+                temp = arithmetic.multiplyBy(temp, fieldValue);
+                textField.setText(temp);
+                break;
+            case "/":
+                temp = arithmetic.divideBy(temp, fieldValue);
+                textField.setText(temp);
+                break;
+            case "%":
+                temp = arithmetic.percent(temp, fieldValue);
+                textField.setText(temp);
+                break;
+        }
+    }
+
+    private void addDigit(String digit, String fieldValue) {
+        if (fieldValue.equals("0")) textField.setText(digit);
+        else textField.setText(fieldValue + digit);
+    }
 }
-
-
